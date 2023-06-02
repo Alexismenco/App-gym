@@ -40,6 +40,7 @@ app.get('/inicio', (req,res) => {
 app.get('/',permisosUser, async (req,res) => {
   var data = await jwt.obtenerDataCookie(req.headers.cookie).then( data => {return data});
   var verPlanes = await contenido.verPlanes(data.email);
+  console.log(data)
   var planes = verPlanes.length>0?verPlanes:null;
   res.render('index',{nombre:data.nombre, fotoPerfil:data.foto, planes})
 });
@@ -228,10 +229,9 @@ if(Direccion.Comuna==null){
 
 // Confirmar pedido maquinas
 app.post('/confirm',permisosUser, async (req,res) => {
-  console.log('aqui')
-  console.log(req.body)
   var data = await jwt.obtenerDataCookie(req.headers.cookie).then( data => {return data});
   var planDeportes = await products.buscarProducto(parseInt(req.body.id));
+  planDeportes.precio = req.body.monto
   // Formulario de envio si es una maquina o suplemento
  var Direccion= await funciones.tieneDireccion(data.email);
  console.log(Direccion)
@@ -245,7 +245,6 @@ if(Direccion.Comuna==null){
 
   let buyOrder = "O-" + Math.floor(Math.random() * 10000) + 1;
   let sessionId = "S-" + Math.floor(Math.random() * 10000) + 1;
-  console.log(req.body.monto)
 
   const tx = new WebpayPlus.Transaction(new Options(IntegrationCommerceCodes.WEBPAY_PLUS, IntegrationApiKeys.WEBPAY, Environment.Integration));
   const response = await tx.create(buyOrder, sessionId, parseInt(req.body.monto), process.env.DIRECCIONRETORNO+'?product='+req.body.id);
@@ -253,7 +252,7 @@ if(Direccion.Comuna==null){
   const token = response.token;
   const url = response.url;
 
-  res.render('confirm',{nombre: data.nombre,email: data.email, fotoPerfil:data.foto, planDeportes, token, url})
+  res.render('confirm',{nombre: data.nombre,email: data.email, fotoPerfil:data.foto, planDeportes, token, url, Direccion})
 });
 
 
