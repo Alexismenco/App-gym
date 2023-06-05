@@ -534,7 +534,7 @@ app.post("/enviarcontacto",permisosUser,function(req,res){
   mensaje+="mensaje: "+req.body.comentario;
   let mail={
     from: req.body.correo,
-    to: 'mencoalexis@gmail.com',
+    to: 'e.fit.super@gmail.com',
     subject:'mensaje formulario contacto',
     text:mensaje
   }
@@ -547,7 +547,22 @@ app.post("/enviarcontacto",permisosUser,function(req,res){
       res.redirect("/ayuda");
     }
   })
-})
+});
+
+// Politicas y privacidad
+app.get('/politica-privacidad', (req,res) => {
+  res.render('politica-privacidad');
+});
+
+// Politicas de cookie
+app.get('/politica-de-cookie', (req,res) => {
+  res.render('politica-de-cookie');
+});
+
+// Aviso legal
+app.get('/aviso-legal', (req,res) => {
+  res.render('aviso-legal');
+});
 
 // Cerrar sesión
 app.post("/logout", function (req,res){
