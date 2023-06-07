@@ -166,8 +166,6 @@ app.get('/suplementos',permisosUser, async (req,res) => {
   var plan = req.query.plan || null;
   if(plan!==null) res.redirect('pago?plan='+ req.query.plan);
 
-
-  console.log(data.foto)
   res.render('suplementos',{nombre: data.nombre, email: data.email, fotoPerfil: data.foto, productos})
 });
 
