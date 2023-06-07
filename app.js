@@ -6,6 +6,7 @@ const jwt = require('./utils/jwt');
 const funciones = require('./utils/funciones');
 const planes = require('./utils/planes');
 const products = require('./utils/productos');
+const suplementos = require('./utils/suplementos');
 const compras = require('./utils/compras');
 const contenido = require('./utils/contenido');
 const { prevenirLogin, permisosUser } = require('./middleware/autenticacion');
@@ -161,11 +162,13 @@ app.get('/nutricion',permisosUser, async (req,res) => {
 // Suplementos
 app.get('/suplementos',permisosUser, async (req,res) => {
   var data = await jwt.obtenerDataCookie(req.headers.cookie).then( data => {return data});
-  var planesDeportes = await planes.buscarPlanes('suplementos');
+  var productos = await suplementos.buscarSuplementos();
   var plan = req.query.plan || null;
   if(plan!==null) res.redirect('pago?plan='+ req.query.plan);
 
-  res.render('suplementos',{nombre: data.nombre, email: data.email, fotoPerfil: data.foto, planesDeportes})
+
+  console.log(data.foto)
+  res.render('suplementos',{nombre: data.nombre, email: data.email, fotoPerfil: data.foto, productos})
 });
 
 // Maquinas
@@ -216,7 +219,20 @@ app.post('/pago',permisosUser, async (req,res) => {
 // Pago productos (Maquinas y accesorios)
 app.get('/buy',permisosUser, async (req,res) => {
   var data = await jwt.obtenerDataCookie(req.headers.cookie).then( data => {return data});
-  var planDeportes = await products.buscarProducto(req.query.plan);
+
+  var planDeportes;
+  var rutaAnterior = req.headers.referer;
+  
+  if (rutaAnterior && rutaAnterior.includes('suplementos')) {
+    planDeportes = await suplementos.buscarSuplemento(req.query.plan);
+    planDeportes.sup = true;
+  } else if (req.query.sup=='si') {
+    planDeportes = await suplementos.buscarSuplemento(req.query.plan);
+    planDeportes.sup = true;
+  }else {
+    planDeportes = await products.buscarProducto(req.query.plan);
+    planDeportes.sup = false;
+  }
   // Formulario de envio si es una maquina o suplemento
  var Direccion= await funciones.tieneDireccion(data.email)
 
@@ -230,11 +246,17 @@ if(Direccion.Comuna==null){
 // Confirmar pedido maquinas
 app.post('/confirm',permisosUser, async (req,res) => {
   var data = await jwt.obtenerDataCookie(req.headers.cookie).then( data => {return data});
-  var planDeportes = await products.buscarProducto(parseInt(req.body.id));
+  var planDeportes;
+  if (req.body.sup=='no') {
+    planDeportes = await products.buscarProducto(parseInt(req.body.id));
+    planDeportes.sup=false;
+  } else {
+    planDeportes = await suplementos.buscarSuplemento(parseInt(req.body.id));
+    planDeportes.sup=true;
+  }
   planDeportes.precio = req.body.monto
   // Formulario de envio si es una maquina o suplemento
  var Direccion= await funciones.tieneDireccion(data.email);
- console.log(Direccion)
 
 if(Direccion.Comuna==null){
   res.render('envio',{nombre: data.nombre,email: data.email, fotoPerfil:data.foto, planDeportes});

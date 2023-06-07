@@ -1,6 +1,6 @@
 <style>
   li{
-    color: black;
+    color: rgb(16, 130, 52);
   }
 </style>
 
@@ -23,6 +23,7 @@
   var ruta = window.location.pathname;
   var home = document.getElementById('home');
   var ajustes = document.getElementById('ajustes');
+  ruta=='/'?ajustes.style.color = 'white':'';
 
   if (ruta == '/' || ruta == '') {
       home.style.color = 'rgb(18, 239, 18)';

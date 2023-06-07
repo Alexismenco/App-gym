@@ -73,7 +73,7 @@
      <!-- Boton volver -->
      <div style="width: 100%; margin-top: 40px;">
         <div style="display: flex; justify-content: space-between;">
-            <a href="/buy?plan=<%= planDeportes.id %>" style="text-decoration: none; font-weight: 800; font-size: 25px;">
+            <a href="/buy?plan=<%= planDeportes.id %>&sup=<%= planDeportes.sup?'si':'no'; %>" style="text-decoration: none; font-weight: 800; font-size: 25px;">
                 <img class="cont-img" src="https://img.icons8.com/?size=512&id=9045&format=png" alt="" style="width: 30px;margin-top: -12px;; margin-left: 10px;">
                 Volver
             </a>
@@ -100,7 +100,7 @@
             <div class="carousel-inner">
                 <% for (let i = 0; i < planDeportes.fotos.length; i++) { %>
                     <div class="carousel-item <%= i === 0 ? 'active' : '' %>">
-                        <img src="./productos/<%= planDeportes.fotos[i] %>" alt="">
+                        <img src="./<%= planDeportes.sup?'suplementos':'productos'; %>/<%= planDeportes.fotos[i] %>" alt="">
                     </div>
                 <% } %>
             </div>
