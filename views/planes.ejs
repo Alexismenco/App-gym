@@ -130,13 +130,12 @@
 
         <div style="flex-basis: 50%;">
             <a href="/pago?plan=<%= planes[i].id %>" class="container">
-                <img src="<%= planes[i].Foto %>" alt="" style="width: 171px; height: 171px;">
-                <span><%= planes[i].Descripcion %></span>
-                <p>Plan: <%= planes[i].Tiempo %></p>
-                <p class="segundo">Precio: $<%= planes[i].Precio %></p>
+                <img src="./planes-deportes/<%= planes[i].foto %>" alt="" style="width: 171px; height: 171px;">
             </a>
-
-        <a class="w-75 mt-5 btn btn-lg" href="/contenido" style="background-color: rgb(18, 239, 18); border-radius: 20px 20px 20px 20px;">Ver</a>
+            <form class="mt-3" action="/contenido" method="post">
+                <input type="number" name="id" value="<%= planes[i].idservicio %>" style="display: none;">
+                <button type="submit" class="w-75" style="background-color: rgb(18, 239, 18); border-radius: 20px 20px 20px 20px;">Ver</button>
+            </form>
 
         </div>
 

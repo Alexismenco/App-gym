@@ -1,7 +1,5 @@
 <%- include ("./partials/cabecera") %> 
 
-<%- include ("./partials/cabecera") %> 
-
 <style>
 .oval-line {
   width: 100%;
@@ -93,7 +91,7 @@
     </div>
 
     <div class="text-center" style="margin-top: -70px;">
-        <span style="font-weight: 800; font-size: 20px;">Planes</span>
+        <span style="font-weight: 800; font-size: 20px;">Plan</span>
     </div>
     
     <div style="width: 100%; margin-top: 50px;">
@@ -111,7 +109,7 @@
         <!-- Boton volver -->
         <div style="width: 100%; margin-top: 40px;">
             <div style="display: flex; justify-content: space-between;">
-                <a href="/" style="text-decoration: none; font-weight: 800; font-size: 25px;">
+                <a href="/planes" style="text-decoration: none; font-weight: 800; font-size: 25px;">
                     <img class="cont-img" src="https://img.icons8.com/?size=512&id=9045&format=png" alt="" style="width: 30px;margin-top: -12px;; margin-left: 10px;">
                     Volver
                 </a>
@@ -123,8 +121,18 @@
 <!-- Card -->
 <h2 class="text-dark text-center mt-5" style="font-weight: 800;">Ver</h2>
 <div class="text-dark contenedor-card" style="display: flex; flex-wrap: wrap; width: 100%; text-align: center;">
+    <iframe class="" width="560" height="315" src="<%= video.link %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="margin-left: auto; margin-right: auto;"></iframe>
+</div>
 
-    <h1>Marcar como leido</h1>
+<form class="mt-3 text-center" action="/contenido" method="post" id="contenidoForm">
+    <input type="number" value="<%= video.id %>" name="id" style="border: none; background-color: transparent; color: transparent;"><br>
+    <button <%= video.position<1?'hidden':'visibility' %> id="anteriorBtn" name="anterior" type="submit"  value="<%= video.position - 1 %>" class="btn btn-primary m-4">Anterior</button>
+    <button <%= video.position>=video.cantidad?'hidden':'visibility' %> id="siguienteBtn" name="siguiente" value="<%= video.position + 1 %>" type="submit" class="btn btn-primary m-4">Siguiente</button>
+  </form>
+  
+
+
+ <div>
 
  </div>
   
@@ -141,8 +149,6 @@
       </a>
     </div>
   </div>
-  
-  
-<%- include ("./partials/pie") %> 
 
+  
 <%- include ("./partials/pie") %> 

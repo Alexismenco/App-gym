@@ -14,7 +14,7 @@
           background-attachment: fixed;
           background-repeat: no-repeat;
           background-size: 100% 100%;
-
+          background-color: transparent;
       }
     </style>
 
@@ -25,24 +25,24 @@
       var ruta= window.location.pathname;
       var fondo = document.getElementById('fondo');
       if(ruta =='/'){
-        fondo.style.backgroundImage = "url('./fondo/fondo principal.png')";
+        fondo.style.backgroundImage = "url('./fondo/fotos-gym/11.jpg')";
       }else if (ruta == '/deportes'){
-        fondo.style.backgroundImage = "url('./fondo/cuerda.png')";
-      }else if (ruta == '/suplementos'){
-        fondo.style.backgroundImage = "url('./fondo/suplemento.png')";
+        fondo.style.backgroundImage = "url('./fondo/fotos-gym/10.jpg')";
       }else if (ruta == '/planes'){
-        fondo.style.backgroundImage = "url('https://i.pinimg.com/564x/07/2f/c7/072fc77a0898c6f768e65aba36adb7b1.jpg')";
+        fondo.style.backgroundImage = "url('./fondo/fotos-gym/10.jpg')";
       }else if (ruta == '/nutricion'){
         fondo.style.backgroundImage = "url('./fondo/nutricion.png')";
       }else if (ruta == '/maquinas'){
-        fondo.style.backgroundImage = "url('./fondo/maquinas.png')";
+        fondo.style.backgroundImage = "url('./fondo/fotos-gym/21.jpg')";
+      } else if (ruta == '/contenido'){
+        fondo.style.backgroundImage = "url('./fondo/fotos-gym/10.jpg')";
       }else if(ruta =='/ajustes' || ruta=='/perfil' || ruta =='/confirm' || ruta=='/perfil/' || ruta=='/seguridad' || ruta=='/ayuda' || ruta=='/pago' || ruta=='/dev' || ruta=='/direccion' || ruta=='/buy' || ruta =='/politica-privacidad' || ruta== '/aviso-legal' || ruta == '/politica-de-cookie'){
         fondo.style.backgroundColor= '#fff';
       }else if(ruta == '/inicio' || '/login'){
         fondo.style.backgroundColor = "#000"
         setTimeout(() => {
-          fondo.style.backgroundColor = ""; // Elimina el color de fondo después de un segundo
-          fondo.style.backgroundImage = "url('./fondo/fondo.png')";
+          fondo.style.backgroundColor = "transparent"; // Elimina el color de fondo después de un segundo
+          fondo.style.backgroundImage = "url('./fondo/fotos-gym/21.jpg')";
         }, 1000);
       }else{
         fondo.style.backgroundImage = "url('./fondo/fondo.png')";

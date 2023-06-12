@@ -47,7 +47,7 @@ const comprobarPlan = async function (compra) {
     // Convertir la diferencia en días
     var diferenciaEnDias = diferenciaEnMilisegundos / (1000 * 60 * 60 * 24);
 
-    if(diferenciaEnDias > 49.0) cambiarEstado(compra.id)
+    if(diferenciaEnDias > 42.0) cambiarEstado(compra.id)
 
 }
 

@@ -16,7 +16,7 @@
 .container {
         position: relative;
         display: inline-block;
-        margin-top: 50px;
+        margin-top: 40px;
         text-decoration: none;
     }
 
@@ -25,7 +25,7 @@
     top: 25%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 85%;
+    width: 90%;
     text-align: center;
     color: white;
     font-weight: 800;
@@ -35,7 +35,7 @@
 
 .container p {
     position: absolute;
-    top: 75%;
+    top: 78%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 65%;
@@ -49,7 +49,7 @@
 
 .container .segundo {
     position: absolute;
-    top: 90%;
+    top: 98%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 85%;
@@ -131,8 +131,8 @@
         <div style="flex-basis: 50%;">
             <a href="/pago?plan=<%= planesDeportes[i].id %>" class="container">
                 <img src="<%= planesDeportes[i].Foto %>" alt="" style="width: 171px; height: 171px;">
-                <span style="width: min-content; "><%= planesDeportes[i].Descripcion %></span>
-                <p>Plan: <%= planesDeportes[i].Tiempo %></p>
+                <span style="width: min-content; margin: 0;"><%= planesDeportes[i].Descripcion %></span>
+                <p style="width: max-content;">Plan: <%= planesDeportes[i].Tiempo %></p>
                 <p class="segundo">Precio: $<%= planesDeportes[i].Precio %></p>
             </a>
         </div>

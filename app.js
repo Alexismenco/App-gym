@@ -9,6 +9,7 @@ const products = require('./utils/productos');
 const suplementos = require('./utils/suplementos');
 const compras = require('./utils/compras');
 const contenido = require('./utils/contenido');
+const verDeportes = require('./utils/ver');
 const { prevenirLogin, permisosUser } = require('./middleware/autenticacion');
 const nodemailer=require('nodemailer');
 const upload = require('express-fileupload');
@@ -41,7 +42,6 @@ app.get('/inicio', (req,res) => {
 app.get('/',permisosUser, async (req,res) => {
   var data = await jwt.obtenerDataCookie(req.headers.cookie).then( data => {return data});
   var verPlanes = await contenido.verPlanes(data.email);
-  console.log(data)
   var planes = verPlanes.length>0?verPlanes:null;
   res.render('index',{nombre:data.nombre, fotoPerfil:data.foto, planes})
 });
@@ -118,26 +118,61 @@ app.post('/perfil',permisosUser, async (req,res) => {
 // Mis planes comprados
 app.get('/planes',permisosUser, async (req,res) => {
   var data = await jwt.obtenerDataCookie(req.headers.cookie).then( data => {return data});
+  // Ver mis planes
   var verPlanes = await contenido.verPlanes(data.email);
   var planes = verPlanes.length>0?verPlanes:null;
   var verificar;
   for(i=0; i<planes.length; i++){
-    console.log('planes', planes[i])
     verificar = await compras.comprobarPlan(planes[i]);
+    if(planes[i].idservicio==1001){
+      planes[i].foto='1-.png';
+    } else if (planes[i].idservicio==1002){
+      planes[i].foto='2-.jpeg';
+    }else if(planes[i].idservicio==1003){
+      planes[i].foto='3-.png';
+    }
+    console.log('planes', planes[i])
+
   }
-  console.log('v v ',verificar)
   res.render('planes',{nombre:data.nombre, fotoPerfil:data.foto, planes})
 });
 
 // Ver contenido de planes
-app.get('/contenido',permisosUser, async (req,res) => {
-  var data = await jwt.obtenerDataCookie(req.headers.cookie).then( data => {return data});
+app.post('/contenido', permisosUser, async (req, res) => {
+  var data = await jwt.obtenerDataCookie(req.headers.cookie).then(data => {
+    return data;
+  });
   var verPlanes = await contenido.verPlanes(data.email);
-  var planes = verPlanes.length>0?verPlanes:null;
+  var planes = verPlanes.length > 0 ? verPlanes : null;
 
- 
-  res.render('contenido',{nombre:data.nombre, fotoPerfil:data.foto, planes})
+  console.log(req.body);
+  // Ver mi plan
+  let mirar = await verDeportes.verDeportes(req.body.id);
+
+  // Siguiente / Anterior
+  let position = 0;
+  console.log(mirar)
+
+  if (req.body.anterior !== undefined) {
+    position = parseInt(req.body.anterior);
+    console.log('Valor de anterior:', position);
+  }
+
+  if (req.body.siguiente !== undefined) {
+    position = parseInt(req.body.siguiente);
+    console.log('Valor de siguiente:', position);
+  }
+
+  let dataVideo = {
+    link: mirar[position],
+    position: position,
+    cantidad: mirar.length - 1,
+    id: req.body.id
+  }
+
+  res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, video: dataVideo });
 });
+
 
 // Planes de deportes
 app.get('/deportes',permisosUser, async (req,res) => {
