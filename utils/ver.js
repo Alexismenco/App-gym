@@ -1,7 +1,6 @@
 const { conexion } = require('../db');
 
 const verDeportes = async function (id) {
-    console.log('la id: ' , id)
 
     var buscarPlan='SELECT * FROM "Servicios" WHERE "id"=$1;'
     var parametros=[id]
@@ -14,15 +13,22 @@ const verDeportes = async function (id) {
     }
 
     if (respuestaPlan.rows.length > 0) {
-        const videos = respuestaPlan.rows[0].Link.split(",");
-        const cantidad = videos.length
-        return videos
+        const videos = respuestaPlan.rows[0].Video.split(",");
+        const titulos = respuestaPlan.rows[0].Titulo.split(",");
+
+        const resultado = [];
+
+        for (let i = 0; i < videos.length; i++) {
+          resultado.push({
+            video: videos[i],
+            titulo: titulos[i],
+          });
+        }
+        return resultado;
       } else {
         // La respuesta de la base de datos está vacía
         return null;
       }
-      
-      
 }
 
 module.exports={verDeportes}

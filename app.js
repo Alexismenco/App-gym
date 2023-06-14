@@ -14,6 +14,9 @@ const { prevenirLogin, permisosUser } = require('./middleware/autenticacion');
 const nodemailer=require('nodemailer');
 const upload = require('express-fileupload');
 
+const fs = require('fs');
+const path = require('path');
+
 const WebpayPlus = require('transbank-sdk').WebpayPlus;
 const { Options, IntegrationApiKeys, Environment, IntegrationCommerceCodes } = require("transbank-sdk");
 
@@ -139,39 +142,34 @@ app.get('/planes',permisosUser, async (req,res) => {
 
 // Ver contenido de planes
 app.post('/contenido', permisosUser, async (req, res) => {
-  var data = await jwt.obtenerDataCookie(req.headers.cookie).then(data => {
-    return data;
-  });
+  var data = await jwt.obtenerDataCookie(req.headers.cookie);
   var verPlanes = await contenido.verPlanes(data.email);
   var planes = verPlanes.length > 0 ? verPlanes : null;
 
-  console.log(req.body);
-  // Ver mi plan
-  let mirar = await verDeportes.verDeportes(req.body.id);
+  var titulos = await verDeportes.verDeportes(req.body.id);
+  
 
-  // Siguiente / Anterior
-  let position = 0;
-  console.log(mirar)
+  // Ruta de la carpeta de videos
+  const videosFolder = path.join(__dirname, 'public', 'videos', 'plan-3');
 
-  if (req.body.anterior !== undefined) {
-    position = parseInt(req.body.anterior);
-    console.log('Valor de anterior:', position);
-  }
+  // Leer el contenido de la carpeta
+  fs.readdir(videosFolder, (err, files) => {
+    if (err) {
+      console.error('Error al leer la carpeta de videos:', err);
+      res.sendStatus(500);
+    } else {
+      // Filtrar los archivos de video
+      const videos = files.filter(file => {
+        const extension = path.extname(file).toLowerCase();
+        return ['.mp4', '.avi', '.mkv'].includes(extension);
+      });
 
-  if (req.body.siguiente !== undefined) {
-    position = parseInt(req.body.siguiente);
-    console.log('Valor de siguiente:', position);
-  }
-
-  let dataVideo = {
-    link: mirar[position],
-    position: position,
-    cantidad: mirar.length - 1,
-    id: req.body.id
-  }
-
-  res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, video: dataVideo });
+      // Pasa la lista de videos al renderizado
+      res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, videos, titulos});
+    }
+  });
 });
+
 
 
 // Planes de deportes
