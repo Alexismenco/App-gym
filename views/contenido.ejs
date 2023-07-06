@@ -163,6 +163,31 @@ video {
 <h2 class="text-center mt-5" style="font-weight: 800;  color: rgb(18, 239, 18); font-weight: 800;">Transforma tu cuerpo y alcanza tu mejor versión.</h2>
 
 <div class="video-container">
+
+<!-- Videos de intro -->
+  <% if (introGym && introGym.length > 0) { %>
+    <ul>
+      <% introGym.forEach(video => { %>
+        <li style="margin-top: 70px;">
+          <!-- Titulos-->
+            <% if (video) { %>
+                <h1 class="text-center" style="font-weight: 800; color: rgb(18, 239, 18);"><%= video.name %></h1>
+
+                <!-- Videos -->
+                <video controls class="custom-video" poster="./logo/blanco.png" style="border-radius: 12px;">
+                  <source src="<%= video.path %>" type="video/mp4">
+                  Tu navegador no admite la reproducción de videos.
+                </video>
+                <p class="m-auto p-5" style="font-size: 26px; font-weight: 600;"><%= video.description %></p>
+            </li>
+            <% } %>
+          
+      <% }); %>
+    </ul>
+  <% } %>
+
+<!-- Videos de plan -->
+
     <% if (videos && videos.length > 0) { %>
         <ul>
           <% videos.forEach(video => { %>
@@ -198,6 +223,5 @@ video {
       </a>
     </div>
   </div>
-
   
 <%- include ("./partials/pie") %> 
