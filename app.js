@@ -4,6 +4,7 @@ require('dotenv').config();
 const {conexion} = require('./db');
 const jwt = require('./utils/jwt');
 const funciones = require('./utils/funciones');
+const introVideos = require('./utils/intro-gym');
 const planes = require('./utils/planes');
 const products = require('./utils/productos');
 const suplementos = require('./utils/suplementos');
@@ -143,6 +144,8 @@ app.get('/planes',permisosUser, async (req,res) => {
 // Ver contenido de planes
 app.post('/contenido', permisosUser, async (req, res) => {
   var data = await jwt.obtenerDataCookie(req.headers.cookie);
+  var introGym = await introVideos.intro();
+  console.log(introGym)
   var verPlanes = await contenido.verPlanes(data.email);
   var planes = verPlanes.length > 0 ? verPlanes : null;
 
@@ -165,7 +168,7 @@ app.post('/contenido', permisosUser, async (req, res) => {
       });
 
       // Pasa la lista de videos al renderizado
-      res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, videos, titulos});
+      res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, videos, titulos, introGym});
     }
   });
 });
