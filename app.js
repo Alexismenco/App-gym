@@ -130,10 +130,14 @@ app.get('/planes',permisosUser, async (req,res) => {
     verificar = await compras.comprobarPlan(planes[i]);
     if(planes[i].idservicio==1001){
       planes[i].foto='1-.png';
+      planes[i].name='Plan HIIT';
+
     } else if (planes[i].idservicio==1002){
       planes[i].foto='2-.jpeg';
+      planes[i].name='Plan Masa Muscular';
     }else if(planes[i].idservicio==1003){
-      planes[i].foto='3-.png';
+      planes[i].foto='3-.jpg';
+      planes[i].name='Plan Abdominales';
     }
     console.log('planes', planes[i])
 
@@ -145,15 +149,22 @@ app.get('/planes',permisosUser, async (req,res) => {
 app.post('/contenido', permisosUser, async (req, res) => {
   var data = await jwt.obtenerDataCookie(req.headers.cookie);
   var introGym = await introVideos.intro();
-  console.log(introGym)
   var verPlanes = await contenido.verPlanes(data.email);
   var planes = verPlanes.length > 0 ? verPlanes : null;
 
   var titulos = await verDeportes.verDeportes(req.body.id);
+
+  var carpeta = 'plan-1/';
+  console.log(req.body.id)
+  if(req.body.id == 1001){
+    carpeta = 'plan-3/';
+  }else if(req.body.id == 1003){
+    carpeta = 'plan-2/';
+  }
   
 
   // Ruta de la carpeta de videos
-  const videosFolder = path.join(__dirname, 'public', 'videos', 'plan-3');
+  const videosFolder = path.join(__dirname, 'public', 'videos', carpeta.slice(0, -1));
 
   // Leer el contenido de la carpeta
   fs.readdir(videosFolder, (err, files) => {
@@ -168,7 +179,7 @@ app.post('/contenido', permisosUser, async (req, res) => {
       });
 
       // Pasa la lista de videos al renderizado
-      res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, videos, titulos, introGym});
+      res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, videos, titulos, introGym, carpeta});
     }
   });
 });
