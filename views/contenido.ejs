@@ -168,7 +168,7 @@ video {
   <% if (introGym && introGym.length > 0) { %>
     <ul>
       <% introGym.forEach(video => { %>
-        <li style="margin-top: 70px;">
+        <li style="margin-top: 70px; text-align: center;">
           <!-- Titulos-->
             <% if (video) { %>
                 <h1 class="text-center" style="font-weight: 800; color: rgb(18, 239, 18);"><%= video.name %></h1>
@@ -179,6 +179,8 @@ video {
                   Tu navegador no admite la reproducción de videos.
                 </video>
                 <p class="m-auto p-5" style="font-size: 26px; font-weight: 600;"><%= video.description %></p>
+
+                <img src="./img-tablas/esfuerzo.jpg" alt="" style="width: 90%; border-radius: 18px;">
             </li>
             <% } %>
           
