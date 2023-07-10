@@ -128,6 +128,7 @@ app.get('/planes',permisosUser, async (req,res) => {
   var verificar;
   for(i=0; i<planes.length; i++){
     verificar = await compras.comprobarPlan(planes[i]);
+    planes[i].dias = verificar
     if(planes[i].idservicio==1001){
       planes[i].foto='1-.png';
       planes[i].name='Plan HIIT';
@@ -139,9 +140,10 @@ app.get('/planes',permisosUser, async (req,res) => {
       planes[i].foto='3-.jpg';
       planes[i].name='Plan Abdominales';
     }
-    console.log('planes', planes[i])
-
   }
+
+  console.log(planes)
+
   res.render('planes',{nombre:data.nombre, fotoPerfil:data.foto, planes})
 });
 
@@ -155,7 +157,6 @@ app.post('/contenido', permisosUser, async (req, res) => {
   var titulos = await verDeportes.verDeportes(req.body.id);
 
   var carpeta = 'plan-1/';
-  console.log(req.body.id)
   if(req.body.id == 1001){
     carpeta = 'plan-3/';
   }else if(req.body.id == 1003){
@@ -165,6 +166,7 @@ app.post('/contenido', permisosUser, async (req, res) => {
 
   // Ruta de la carpeta de videos
   const videosFolder = path.join(__dirname, 'public', 'videos', carpeta.slice(0, -1));
+  console.log(videosFolder)
 
   // Leer el contenido de la carpeta
   fs.readdir(videosFolder, (err, files) => {
@@ -178,12 +180,17 @@ app.post('/contenido', permisosUser, async (req, res) => {
         return ['.mp4', '.avi', '.mkv'].includes(extension);
       });
 
+      // 19 1002 masa muscular
+      // 9v 1003 abdominales
+      // 7v 1001 hiit
+      var id = req.body.id;
+      console.log(videos)
+
       // Pasa la lista de videos al renderizado
-      res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, videos, titulos, introGym, carpeta});
+      res.render('contenido', { nombre: data.nombre, fotoPerfil: data.foto, planes, videos, titulos, introGym, carpeta, id});
     }
   });
 });
-
 
 
 // Planes de deportes
